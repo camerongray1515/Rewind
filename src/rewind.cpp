@@ -1,10 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include <string>
-#include <stdio.h>
-#include <stdlib.h>
 #include <boost/program_options.hpp>
-#include <ctime>
 #include <iomanip>
 
 std::string filename = "/tmp/pending-rollback.rewind";

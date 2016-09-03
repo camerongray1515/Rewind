@@ -1,0 +1,59 @@
+.\" Manpage for rewind.
+.TH rewind 1 "03 Sep 2016" "1.0" "rewind man page"
+.SH NAME
+rewind \- Execute a command and automatically execute a "rollback command" if
+user does not respond by running the "keep" command
+.SH SYNOPSIS
+rewind run <CHANGE_COMMAND> <ROLLBACK_COMMAND> [-t TIMEOUT_VALUE]
+
+rewind keep
+.SH DESCRIPTION
+rewind allows the user to execute a command that makes a change to a system and
+then after a period of time, if the user has not issued the "keep" command,
+will automatically execute a command to restore the system to the previous
+state.  It is designed for changing settings that run the risk of locking the
+user out of the system - For example, altering network settings on a remote
+machine only accessible over SSH.
+
+.SH ARGUMENTS
+.IP "CHANGE_COMMAND"
+This command is what makes the change to the system such as restarting the
+service that has been modified.
+
+.IP "ROLLBACK_COMMAND"
+This command should revert the system to its previous stage.  For example,
+copying a backup of the configuration file to the appropriate location and then
+restarting the appropriate service.
+
+.SH OPTIONS
+.IP  "-h, --timeout"
+Number of seconds to wait before executing the rollback command.  Defaults to
+30 seconds.
+
+.SH USAGE
+Execute "rewind run <CHANGE_COMMAND> <ROLLBACK_COMMAND>" - The change command
+will be executed.
+
+If changes are successful, execute "rewind keep" which will stop the rollback
+command from being executed.
+
+If changes were not successful, wait for the timeout period (default 30 seconds)
+to elapse, the rollback command will then be executed.
+
+
+.SH EXAMPLES
+.IP "rewind run ""touch foo"" ""rm foo"" -t 60"
+Create a file called "foo", if the user does not execute the keep command within
+60 seconds, the file will be deleted.
+.IP "rewind run ""touch foo && rm bar"" ""rm foo && touch bar"""
+Multiple commands can be supplied by joining them with "&&"
+.IP "rewind run ""./change.sh"" ""./rollback.sh"""
+Shell scripts can be supplied instead of bare commands
+.IP "rewind keep"
+Keep the changes from the previous run (i.e. do not run the rollback command)
+
+.SH AUTHOR
+Developed by Cameron Gray - http://www.camerongray.me/
+
+.SH COPYRIGHT
+Copyright © 2016 Cameron Gray - MIT License
