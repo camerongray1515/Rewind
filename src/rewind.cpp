@@ -18,26 +18,20 @@ void create_file(char change_command[]);
 bool file_exists();
 void delete_file();
 
-int main(int argc, char *argv[])
-{
-    int timeout;
+int main(int argc, char *argv[]) {
+    int timeout = 30;
 
     po::options_description desc("Allowed options");
-    desc.add_options()("timeout,t", po::value<int>(&timeout)->default_value(30),
+    desc.add_options()("timeout,t", po::value<int>(&timeout)->default_value(timeout),
             "Timeout before rollback command is executed");
     po::variables_map vm;
-    try
-    {
+    try {
         po::store(po::command_line_parser(argc, argv).options(desc).run(), vm);
-    }
-    catch (po::unknown_option e)
-    {
+    } catch (po::unknown_option e) {
         std::cout << "Unknown option" << std::endl;
         print_usage(argv, desc);
         return 0;
-    }
-    catch (po::invalid_option_value e)
-    {
+    } catch (po::invalid_option_value e) {
         std::cout << "Invalid value for option" << std::endl;
         print_usage(argv, desc);
         return 0;
@@ -52,73 +46,60 @@ int main(int argc, char *argv[])
 
     std::string mode(argv[1]);
 
-    if (mode == "run")
-    {
+    if (mode == "run") {
         char *change_command = argv[2];
         char *rollback_command = argv[3];
-        if (argc < 4 || strlen(change_command) == 0 || strlen(rollback_command) == 0)
-        {
+        if (argc < 4 || strlen(change_command) == 0 || strlen(rollback_command) == 0) {
             std::cout << "Must provide both a change command and a rollback command" << std::endl;
             print_usage(argv, desc);
             return 1;
         }
 
-        if (timeout < 1)
-        {
+        if (timeout < 1) {
             std::cout << "Timeout must be at least 1" << std::endl;
             print_usage(argv, desc);
             return 1;
         }
 
         run(change_command, rollback_command, timeout);
-    }
-    else if(mode == "keep")
-    {
+    } else if(mode == "keep") {
         keep();
-    }
-    else
-    {
+    } else {
         print_usage(argv, desc);
     }
 
     return 0;
 }
 
-void print_usage(char *argv[], po::options_description desc)
-{
+void print_usage(char *argv[], po::options_description desc) {
     std::cout << "Usage:" << std::endl;
     std::cout << "  Run a new command:\t" << argv[0] << " run <change command> <rollback command> [options]" << std::endl;
     std::cout << "  Stop rollback:\t" << argv[0] << " keep" << std::endl;
     std::cout << desc << std::endl;
 }
 
-void run(char change_command[], char rollback_command[], int timeout)
-{
+void run(char change_command[], char rollback_command[], int timeout) {
     create_file(change_command);
     system(change_command);
     daemon(1, 0);
     sleep(timeout);
 
-    if (file_exists())
-    {
+    if (file_exists()) {
         system(rollback_command);
         delete_file();
     }
 }
 
-void keep()
-{
+void keep() {
     delete_file();
     std::cout << "Rollback aborted, changes will be kept!" << std::endl;
 }
 
-void create_file(char change_command[])
-{
+void create_file(char change_command[]) {
     // Check if the file from an old run exists, if so ask the user to confirm
     // deletion
     std::ifstream inf(filename);
-    if (inf.good())
-    {
+    if (inf.good()) {
         std::string timestamp;
         std::string command;
         std::getline(inf, timestamp);
@@ -133,8 +114,7 @@ void create_file(char change_command[])
 
         std::cout << "Cancel previous rollback and start this run? (y/N): " << std::flush;
         char response = std::cin.get();
-        if (response != 'y' && response != 'Y')
-        {
+        if (response != 'y' && response != 'Y') {
             std::cout << "Aborting run!" << std::endl;
             return;
         }
@@ -147,13 +127,11 @@ void create_file(char change_command[])
     outf << change_command << std::endl;
 }
 
-void delete_file()
-{
+void delete_file() {
     std::remove(filename.c_str());
 }
 
-bool file_exists()
-{
+bool file_exists() {
     std::ifstream f(filename);
     return f.good();
 }
