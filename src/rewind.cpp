@@ -77,7 +77,7 @@ void print_usage(char *argv[], po::options_description desc) {
 void run(char change_command[], char rollback_command[], int timeout) {
     create_file(change_command);
     system(change_command);
-    daemon(1, 0);
+    daemon(1, 0); // Do not change CWD, redirect output to /dev/null
     sleep(timeout);
 
     if (file_exists()) {
@@ -92,8 +92,6 @@ void keep() {
 }
 
 void create_file(char change_command[]) {
-    // Check if the file from an old run exists, if so ask the user to confirm
-    // deletion
     std::ifstream inf(filename);
     if (inf.good()) {
         std::string timestamp;
