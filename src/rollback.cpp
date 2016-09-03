@@ -26,8 +26,29 @@ int main(int argc, char *argv[])
     desc.add_options()("timeout,t", po::value<int>(&timeout)->default_value(30),
             "Timeout before rollback command is executed");
     po::variables_map vm;
-    po::store(po::command_line_parser(argc, argv).options(desc).run(), vm);
+    try
+    {
+        po::store(po::command_line_parser(argc, argv).options(desc).run(), vm);
+    }
+    catch (po::unknown_option e)
+    {
+        std::cout << "Unknown option" << std::endl;
+        print_usage(argv, desc);
+        return 0;
+    }
+    catch (po::invalid_option_value e)
+    {
+        std::cout << "Invalid value for option" << std::endl;
+        print_usage(argv, desc);
+        return 0;
+    }
     po::notify(vm);
+
+    if (argc < 2) {
+        std::cout << "You must supply an action to be performed" << std::endl;
+        print_usage(argv, desc);
+        return 0;
+    }
 
     std::string mode(argv[1]);
 
