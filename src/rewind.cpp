@@ -7,7 +7,7 @@
 #include <ctime>
 #include <iomanip>
 
-std::string filename = "/tmp/execution.rollback";
+std::string filename = "/tmp/pending-rollback.rewind";
 
 namespace po = boost::program_options;
 
