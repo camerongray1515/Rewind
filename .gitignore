@@ -28,10 +28,6 @@
 *.out
 *.app
 
-# http://www.gnu.org/software/automake
-
-Makefile.in
-
 # http://www.gnu.org/software/autoconf
 
 /src/autom4te.cache
@@ -40,9 +36,14 @@ Makefile.in
 /src/aclocal.m4
 /src/compile
 /src/config.h.in
-/src/configure
 /src/configure.scan
 /src/depcomp
 /src/install-sh
 /src/missing
 /src/stamp-h1
+
+# Other automake/autoconf stuff
+.deps
+config.log
+config.status
+/src/Makefile
