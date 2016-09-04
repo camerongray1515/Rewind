@@ -1,15 +1,14 @@
 #include <iostream>
 #include <fstream>
-#include <boost/program_options.hpp>
 #include <iomanip>
+#include <unistd.h>
+#include <string.h>
 
 std::string filename = "/tmp/pending-rollback.rewind";
 
-namespace po = boost::program_options;
-
 void run(char change_command[], char rollback_command[], int timeout);
 void keep();
-void print_usage(char *argv[], po::options_description desc);
+void print_usage(char *argv[]);
 void create_file(char change_command[]);
 bool file_exists();
 void delete_file();
@@ -17,43 +16,41 @@ void delete_file();
 int main(int argc, char *argv[]) {
     int timeout = 30;
 
-    po::options_description desc("Allowed options");
-    desc.add_options()("timeout,t", po::value<int>(&timeout)->default_value(timeout),
-            "Timeout before rollback command is executed");
-    po::variables_map vm;
-    try {
-        po::store(po::command_line_parser(argc, argv).options(desc).run(), vm);
-    } catch (po::unknown_option e) {
-        std::cout << "Unknown option" << std::endl;
-        print_usage(argv, desc);
-        return 0;
-    } catch (po::invalid_option_value e) {
-        std::cout << "Invalid value for option" << std::endl;
-        print_usage(argv, desc);
-        return 0;
+    int opt;
+    while((opt = getopt(argc, argv, "t:")) != -1) {
+        switch(opt) {
+            case 't':
+                timeout = atoi(optarg);
+                break;
+            case '?':
+                print_usage(argv);
+                return 1;
+            default:
+                abort();
+        }
     }
-    po::notify(vm);
 
     if (argc < 2) {
         std::cout << "You must supply an action to be performed" << std::endl;
-        print_usage(argv, desc);
+        print_usage(argv);
         return 0;
     }
 
     std::string mode(argv[1]);
+    std::cout << mode << std::endl;
 
     if (mode == "run") {
         char *change_command = argv[2];
         char *rollback_command = argv[3];
         if (argc < 4 || strlen(change_command) == 0 || strlen(rollback_command) == 0) {
             std::cout << "Must provide both a change command and a rollback command" << std::endl;
-            print_usage(argv, desc);
+            print_usage(argv);
             return 1;
         }
 
         if (timeout < 1) {
             std::cout << "Timeout must be at least 1" << std::endl;
-            print_usage(argv, desc);
+            print_usage(argv);
             return 1;
         }
 
@@ -61,17 +58,16 @@ int main(int argc, char *argv[]) {
     } else if(mode == "keep") {
         keep();
     } else {
-        print_usage(argv, desc);
+        print_usage(argv);
     }
 
     return 0;
 }
 
-void print_usage(char *argv[], po::options_description desc) {
+void print_usage(char *argv[]) {
     std::cout << "Usage:" << std::endl;
     std::cout << "  Run a new command:\t" << argv[0] << " run <change command> <rollback command> [options]" << std::endl;
     std::cout << "  Stop rollback:\t" << argv[0] << " keep" << std::endl;
-    std::cout << desc << std::endl;
 }
 
 void run(char change_command[], char rollback_command[], int timeout) {
