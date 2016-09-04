@@ -34,15 +34,15 @@ Makefile.in
 
 # http://www.gnu.org/software/autoconf
 
-/autom4te.cache
-/autoscan.log
-/autoscan-*.log
-/aclocal.m4
-/compile
-/config.h.in
-/configure
-/configure.scan
-/depcomp
-/install-sh
-/missing
-/stamp-h1
+/src/autom4te.cache
+/src/autoscan.log
+/src/autoscan-*.log
+/src/aclocal.m4
+/src/compile
+/src/config.h.in
+/src/configure
+/src/configure.scan
+/src/depcomp
+/src/install-sh
+/src/missing
+/src/stamp-h1
