@@ -4,7 +4,7 @@
 rewind \- Execute a command and automatically execute a "rollback command" if
 user does not respond by running the "keep" command
 .SH SYNOPSIS
-rewind [-t TIMEOUT_VALUE] run <CHANGE_COMMAND> <ROLLBACK_COMMAND>
+rewind [options] run <CHANGE_COMMAND> <ROLLBACK_COMMAND>
 
 rewind keep
 .SH DESCRIPTION
@@ -26,7 +26,7 @@ copying a backup of the configuration file to the appropriate location and then
 restarting the appropriate service.
 
 .SH OPTIONS
-.IP  "-h"
+.IP  "-t"
 Number of seconds to wait before executing the rollback command.  Defaults to
 30 seconds.
 
