@@ -38,8 +38,11 @@
 /src/config.h.in
 /src/configure.scan
 /src/depcomp
+/src/install-sh
 /src/missing
 /src/stamp-h1
+/src/Makefile.in
+/src/configure
 
 # Other automake/autoconf stuff
 .deps
