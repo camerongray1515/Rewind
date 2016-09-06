@@ -1,10 +1,10 @@
 .\" Manpage for rewind.
-.TH rewind 1 "06 Sep 2016" "0.1" "rewind man page"
+.TH rewind 1 "06 Sep 2016" "0.1.1" "rewind man page"
 .SH NAME
 rewind \- Execute a command and automatically execute a "rollback command" if
 user does not respond by running the "keep" command
 .SH SYNOPSIS
-rewind run <CHANGE_COMMAND> <ROLLBACK_COMMAND> [-t TIMEOUT_VALUE]
+rewind [-t TIMEOUT_VALUE] run <CHANGE_COMMAND> <ROLLBACK_COMMAND>
 
 rewind keep
 .SH DESCRIPTION
@@ -42,7 +42,7 @@ to elapse, the rollback command will then be executed.
 
 
 .SH EXAMPLES
-.IP "rewind run ""touch foo"" ""rm foo"" -t 60"
+.IP "rewind -t 60 run ""touch foo"" ""rm foo"""
 Create a file called "foo", if the user does not execute the keep command within
 60 seconds, the file will be deleted.
 .IP "rewind run ""touch foo && rm bar"" ""rm foo && touch bar"""
