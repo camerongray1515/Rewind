@@ -68,6 +68,8 @@ void print_usage(char *argv[]) {
     std::cout << "Usage:" << std::endl;
     std::cout << "  Run a new command:\t" << argv[0] << " run <change command> <rollback command> [options]" << std::endl;
     std::cout << "  Stop rollback:\t" << argv[0] << " keep" << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << "  -t  -  Number of seconds to wait before executing the rollback command.  Defaults to 30 seconds." << std::endl;
 }
 
 void run(char change_command[], char rollback_command[], int timeout) {
