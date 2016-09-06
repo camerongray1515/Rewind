@@ -36,12 +36,12 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    std::string mode(argv[1]);
-    std::cout << mode << std::endl;
+    int option_base = optind;
+    std::string mode(argv[option_base]);
 
     if (mode == "run") {
-        char *change_command = argv[2];
-        char *rollback_command = argv[3];
+        char *change_command = argv[option_base+1];
+        char *rollback_command = argv[option_base+2];
         if (argc < 4 || strlen(change_command) == 0 || strlen(rollback_command) == 0) {
             std::cout << "Must provide both a change command and a rollback command" << std::endl;
             print_usage(argv);
