@@ -1,4 +1,4 @@
-AC_INIT([rewind], [1.0], [rewind@camerongray.me])
+AC_INIT([rewind], [0.1], [rewind@camerongray.me])
 AM_INIT_AUTOMAKE
 CXXFLAGS="$CXXFLAGS -std=c++11"
 AC_PROG_CXX
