@@ -18,6 +18,11 @@ Rewind uses Autotools (Automake and Autoconf) to generate its makefile and confi
 change into the src directory and run `./automake.sh` to generate the appropriate files.  You can then follow steps 2 and
 3 above to install it on your system.
 
+### FreeBSD Users
+When installing on FreeBSD, autoconf will attempt to install the man page to `/usr/local/share/man/` whereas FreeBSD uses the
+location `/usr/local/man/`.  In order to install the man page correctly you should provide the argument 
+`--mandir /usr/local/man/` to the configure script.
+
 ## Usage
 Rewind has two commands, "run" and "keep".  `rewind run <CHANGE_COMMAND> <ROLLBACK_COMMAND>` will execute the change command and
 if `rewind keep` is not executed within the timeout window (by default 30 seconds) the rollback command will be executed.  An
