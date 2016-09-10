@@ -54,14 +54,19 @@ int main(int argc, char *argv[]) {
             return 1;
         }
 
-        run(change_command, rollback_command, timeout);
+        try {
+            run(change_command, rollback_command, timeout);
+        } catch (char const* e) {
+            std::cout << e << std::endl;
+            return EXIT_FAILURE;
+        }
     } else if(mode == "keep") {
         keep();
     } else {
         print_usage(argv);
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 void print_usage(char *argv[]) {
@@ -107,8 +112,7 @@ void create_file(char change_command[]) {
         std::cout << "Cancel previous rollback and start this run? (y/N): " << std::flush;
         char response = std::cin.get();
         if (response != 'y' && response != 'Y') {
-            std::cout << "Aborting run!" << std::endl;
-            return;
+            throw "Aborting Run";
         }
     }
 
